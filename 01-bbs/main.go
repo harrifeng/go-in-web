@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	"github.com/harrifeng/go-in-web/01-bbs/data"
 )
 
 func main() {
@@ -22,5 +24,8 @@ func main() {
 }
 
 func index(writer http.ResponseWriter, request *http.Request) {
+	threads, err := data.Threads()
+
+	fmt.Println(threads, err)
 	fmt.Fprintf(writer, "Hello World, %s", request.URL.Path[1:])
 }

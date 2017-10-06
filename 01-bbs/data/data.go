@@ -10,7 +10,8 @@ import (
 var Db *sql.DB
 
 func init() {
-	Db, err := sql.Open("mysql", "root:root@/bbs")
+	var err error
+	Db, err = sql.Open("mysql", "root:root@/bbs")
 	if err != nil {
 		log.Fatal(err)
 	}
