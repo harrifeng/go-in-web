@@ -1,6 +1,9 @@
 package data
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type User struct {
 	Id        int
@@ -17,4 +20,17 @@ type Session struct {
 	Email     string
 	UserId    int
 	CreatedAt time.Time
+}
+
+func (user *User) Create() (err error) {
+	statement := `insert into users (uuid, name, email, password, created_at) values (?,?,?,?,?)`
+	stmt, err := Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	id, err := stmt.Exec("uuid123", user.Name, user.Email, user.Password, time.Now())
+	fmt.Println(id)
+	return
 }

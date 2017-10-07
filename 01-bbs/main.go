@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 
@@ -15,6 +16,7 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static/", files))
 	mux.HandleFunc("/", index)
 	mux.HandleFunc("/signup", signup)
+	mux.HandleFunc("/signup_account", signupAccount)
 	server := &http.Server{
 		Addr:    "0.0.0.0:7890",
 		Handler: mux,
@@ -34,6 +36,26 @@ func index(writer http.ResponseWriter, request *http.Request) {
 
 func signup(writer http.ResponseWriter, request *http.Request) {
 	generateHTML(writer, nil, "login.layout", "public.navbar", "signup")
+}
+
+func signupAccount(writer http.ResponseWriter, request *http.Request) {
+	err := request.ParseForm()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	user := data.User{
+		Name:     request.PostFormValue("name"),
+		Email:    request.PostFormValue("email"),
+		Password: request.PostFormValue("password"),
+	}
+
+	if err := user.Create(); err != nil {
+		log.Fatal(err)
+	}
+
+	http.Redirect(writer, request, "/index", 302)
+
 }
 
 func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
