@@ -16,5 +16,6 @@ mysql -h127.0.0.1 -uroot -proot bbs < ./sql/setup.sql
 ## prepare library
 
 ```
-go get -u github.com/go-sql-driver/mysql
+go get -u github.com/golang/dep/cmd/dep
+dep ensure
 ```
