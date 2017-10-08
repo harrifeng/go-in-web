@@ -30,7 +30,7 @@ func (user *User) Create() (err error) {
 	}
 	defer stmt.Close()
 
-	id, err := stmt.Exec("uuid123", user.Name, user.Email, user.Password, time.Now())
+	id, err := stmt.Exec(createUUID(), user.Name, user.Email, user.Password, time.Now())
 	fmt.Println(id)
 	return
 }
