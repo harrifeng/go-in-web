@@ -17,6 +17,7 @@ func main() {
 	mux.HandleFunc("/", index)
 	mux.HandleFunc("/signup", signup)
 	mux.HandleFunc("/signup_account", signupAccount)
+	mux.HandleFunc("/login", login)
 	server := &http.Server{
 		Addr:    "0.0.0.0:7890",
 		Handler: mux,
@@ -38,7 +39,10 @@ func index(writer http.ResponseWriter, request *http.Request) {
 		generateHTML(writer, threads, "layout", "public.navbar", "index")
 	}
 
+}
 
+func login(writer http.ResponseWriter, request *http.Request) {
+	generateHTML(writer, nil, "login.layout", "public.navbar", "login")
 }
 
 func signup(writer http.ResponseWriter, request *http.Request) {
