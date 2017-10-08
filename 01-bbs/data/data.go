@@ -14,7 +14,7 @@ var Db *sql.DB
 
 func init() {
 	var err error
-	Db, err = sql.Open("mysql", "root:root@/bbs")
+	Db, err = sql.Open("mysql", "root:root@/bbs?parseTime=true")
 	if err != nil {
 		log.Fatal(err)
 	}

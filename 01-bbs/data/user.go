@@ -34,3 +34,12 @@ func (user *User) Create() (err error) {
 	fmt.Println(id)
 	return
 }
+
+func UserByEmail(email string) (user User, err error) {
+	user = User{}
+	err = Db.QueryRow(
+		`SELECT id, uuid, name, email, password, created_at FROM users WHERE email = ?`,
+		email,
+	).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+	return
+}

@@ -18,6 +18,7 @@ func main() {
 	mux.HandleFunc("/signup", signup)
 	mux.HandleFunc("/signup_account", signupAccount)
 	mux.HandleFunc("/login", login)
+	mux.HandleFunc("/authenticate", authenticate)
 	server := &http.Server{
 		Addr:    "0.0.0.0:7890",
 		Handler: mux,
@@ -29,6 +30,8 @@ func main() {
 }
 
 func index(writer http.ResponseWriter, request *http.Request) {
+
+	fmt.Println(data.UserByEmail("hfeng@hfeng.com"))
 
 	threads, err := data.Threads()
 
@@ -43,6 +46,21 @@ func index(writer http.ResponseWriter, request *http.Request) {
 
 func login(writer http.ResponseWriter, request *http.Request) {
 	generateHTML(writer, nil, "login.layout", "public.navbar", "login")
+}
+
+func authenticate(writer http.ResponseWriter, request *http.Request) {
+	err := request.ParseForm()
+	user, err := data.UserByEmail(request.PostFormValue("email"))
+	if err != nil {
+		fmt.Println("authenticate:", err)
+	} else {
+		http.Redirect(writer, request, "/", 302)
+	}
+	if user.Password == request.PostFormValue("password") {
+
+	} else {
+		http.Redirect(writer, request, "/", 302)
+	}
 }
 
 func signup(writer http.ResponseWriter, request *http.Request) {
