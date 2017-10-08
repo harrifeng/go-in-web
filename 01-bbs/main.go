@@ -28,10 +28,17 @@ func main() {
 }
 
 func index(writer http.ResponseWriter, request *http.Request) {
+
 	threads, err := data.Threads()
 
-	fmt.Println(threads, err)
-	fmt.Fprintf(writer, "Hello World, %s", request.URL.Path[1:])
+	fmt.Println(threads)
+	if err != nil {
+		fmt.Println(writer, request, "Cannot get threads")
+	} else {
+		generateHTML(writer, threads, "layout", "public.navbar", "index")
+	}
+
+
 }
 
 func signup(writer http.ResponseWriter, request *http.Request) {
