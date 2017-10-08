@@ -31,11 +31,8 @@ func main() {
 
 func index(writer http.ResponseWriter, request *http.Request) {
 
-	fmt.Println(data.UserByEmail("hfeng@hfeng.com"))
-
 	threads, err := data.Threads()
 
-	fmt.Println(threads)
 	if err != nil {
 		fmt.Println(writer, request, "Cannot get threads")
 	} else {
@@ -52,14 +49,19 @@ func authenticate(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
 	user, err := data.UserByEmail(request.PostFormValue("email"))
 	if err != nil {
-		fmt.Println("authenticate:", err)
-	} else {
-		http.Redirect(writer, request, "/", 302)
+		fmt.Println("authenticate1:", err)
 	}
 	if user.Password == request.PostFormValue("password") {
+		session, err := user.CreateSession()
+
+		if err != nil {
+			log.Println("authenticate:", err)
+		}
+		fmt.Println("session", session)
+		http.Redirect(writer, request, "/", 302)
 
 	} else {
-		http.Redirect(writer, request, "/", 302)
+		http.Redirect(writer, request, "/login", 302)
 	}
 }
 
